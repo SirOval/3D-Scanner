@@ -22,7 +22,9 @@ test = dataset_in{y};
 %element is used to open, hole filling occurs, and pixel areas ># are
 %opened 
 test_gray = rgb2gray(test);
+
 test_bin = imbinarize(test_gray,'global');
+%test_bin = imbinarize(test_gray,'global');
 %dddd
 if(back)
     test_diff = ones(size(test_bin))-test_bin;
@@ -35,7 +37,6 @@ test_fill = imfill(test_diff);
 test_open2 = bwareaopen(test_fill, 10000);
 
 %Generate the color image from the separated foreground
-
 test_color(:,:,1) = uint8(test_open2).*test(:,:,1);
 test_color(:,:,2) = uint8(test_open2).*test(:,:,2);
 test_color(:,:,3) = uint8(test_open2).*test(:,:,3);

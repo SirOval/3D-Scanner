@@ -22,13 +22,12 @@ function [mpselect,features] = feature_matching(roi_in,file_num,bounds,scale_thr
 
 mpselect = cell(file_num,2);
 features = cell(file_num,2);
+%matchedPoints4ims = cell(file_num,2);
 
 ind=1;
 s1 = rgb2gray(roi_in{1});
 s1_surf = detectSURFFeatures(s1);
 [s1_features,s1_valid_points] = extractFeatures(s1,s1_surf);
-features{ind,1} = s1_features;
-features{ind,2} = s1_valid_points;
 
 for ind=2:file_num
  
@@ -41,13 +40,13 @@ s2 = rgb2gray(roi_in{ind});
 s2_surf = detectSURFFeatures(s2);
 [s2_features,s2_valid_points] = extractFeatures(s2,s2_surf);
 
-features{ind,1} = s1_features;
-features{ind,2} = s1_valid_points;
-
 indexPairs = matchFeatures(s1_features,s2_features, 'Unique',true);
 
-matchedPoints1 = s1_valid_points(indexPairs(:,1));
-matchedPoints2 = s2_valid_points(indexPairs(:,2));
+matchedPoints1 = s1_valid_points(indexPairs(:,1),:);
+matchedPoints2 = s2_valid_points(indexPairs(:,2),:);
+
+featMatch1 = s1_features(indexPairs(:,1),:);
+featMatch2 = s2_features(indexPairs(:,2),:);
 
 newObject1 = [];
 newObject2=[];
@@ -79,6 +78,17 @@ end
 %Selects the tuned feature matches from tuning using the newObject index
 mpselect{ind-1,1} = matchedPoints1(newObject1);
 mpselect{ind-1,2} = matchedPoints2(newObject2);
+
+
+features{ind-1,1} = featMatch1(newObject1);
+features{ind-1,2} = featMatch2(newObject2);
+
+
+% indexPairs4ims = matchFeatures(features{ind-1,2},features{ind+1,1}, 'Unique',true);
+% 
+% matchedPoints4ims{ind-1,1} = mpselect{ind-1,2}(indexPairs4ims(:,1));
+% matchedPoints4ims2{ind-1,2} = mpselect{ind,1}(indexPairs4ims(:,2));
+% 
 end
 
 %Code for showing feature points on a single image

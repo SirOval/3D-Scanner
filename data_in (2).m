@@ -17,7 +17,7 @@ function [dataset,file_num] = data_in(direc,folder_directory,index1)
 a=dir([direc '/*.jpg']);
 dataset=cell(1,size(a,1));
 
-%Reads in each image and puts it into the dataset variable. If there is no
+%Reads in each image and puts it into the dataset variable (cell). If there is no
 %image at an index, the loop breaks/ends
 for x =1:1000
     capture_temp = sprintf(folder_directory,x+index1);
@@ -26,7 +26,6 @@ for x =1:1000
         break
     else
         dataset{x} = imread(capture_temp);
-%       dataset{x} = resize(dataset{x}, [480 480]);
     end
 end
 
